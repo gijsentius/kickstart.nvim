@@ -247,6 +247,7 @@ require('lazy').setup({
   --            })
   --        end,
   --    }
+  'tpope/vim-fugitive',
   --
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
