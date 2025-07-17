@@ -193,9 +193,60 @@ require('lazy').setup({
   -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
   --
   {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+
+    config = function()
+      local harpoon = require 'harpoon'
+      harpoon:setup {}
+
+      local function toggle_telescope(harpoon_files)
+        local conf = require('telescope.config').values
+
+        local file_paths = {}
+        for _, item in ipairs(harpoon_files.items) do
+          table.insert(file_paths, item.value)
+        end
+
+        require('telescope.pickers')
+          .new({}, {
+            prompt_title = 'Harpoon',
+            finder = require('telescope.finders').new_table {
+              results = file_paths,
+            },
+            previewer = conf.file_previewer {},
+            sorter = conf.generic_sorter {},
+          })
+          :find()
+      end
+
+      vim.keymap.set('n', '<C-e>', function()
+        toggle_telescope(harpoon:list())
+      end, {
+        desc = 'Open Harpoon (Telescope UI)',
+      })
+
+      vim.keymap.set('n', '<leader>a', function()
+        harpoon:list():add()
+      end, { desc = 'Harpoon: [A]dd file' })
+      vim.keymap.set('n', '<leader><C-d>', function()
+        harpoon:list():remove()
+      end, { desc = '[H]arpoon: [R]remove file' })
+      vim.keymap.set('n', '<leader>n', function()
+        harpoon:list():next()
+      end, { desc = 'Harpoon: Cycle [N]ext' })
+      vim.keymap.set('n', '<leader>p', function()
+        harpoon:list():prev()
+      end, { desc = 'Harpoon: Cycle [P]revious' })
+    end,
+  },
+
+  {
     'nvim-telescope/telescope-file-browser.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
   },
+
   {
     'stevearc/oil.nvim',
     ---@module 'oil'
@@ -493,6 +544,8 @@ require('lazy').setup({
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          map('<leader>d', '<cmd>lua vim.diagnostic.open_float()<CR>', 'Open [D]iagnostic')
+
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
@@ -613,7 +666,7 @@ require('lazy').setup({
         },
       }
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
+      -- LSP servers and clients are able to communicate to each other what features they support.mappings
       --  By default, Neovim doesn't support everything that is in the LSP specification.
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
@@ -870,8 +923,8 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    --'folke/tokyonight.nvim',
-    'navarasu/onedark.nvim',
+    'folke/tokyonight.nvim',
+    --'navarasu/onedark.nvim',
     opts = {
       --   style = 'storm',
       style = 'cool',
@@ -888,7 +941,8 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'onedark'
+      --vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'tokyonight-storm'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
