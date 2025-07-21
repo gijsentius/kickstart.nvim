@@ -137,6 +137,9 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+vim.keymap.set('n', '<C-w>>', '<C-w>30>', { desc = 'Increase window to sidebar size' })
+vim.keymap.set('n', '<C-w><', '<C-w>30<', { desc = 'Decrease window to sidebar size' })
+
 -- Oil keymaps
 vim.keymap.set('n', '<leader>-', ':Oil<CR>', { desc = 'Open directory of current buffer' })
 
@@ -251,7 +254,11 @@ require('lazy').setup({
     'stevearc/oil.nvim',
     ---@module 'oil'
     ---@type oil.SetupOpts
-    opts = {},
+    opts = {
+      view_options = {
+        show_hidden = true,
+      },
+    },
     -- Optional dependencies
     -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
     dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if you prefer nvim-web-devicons
