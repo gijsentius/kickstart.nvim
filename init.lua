@@ -143,6 +143,11 @@ vim.keymap.set('n', '<C-w><', '<C-w>30<', { desc = 'Decrease window to sidebar s
 -- Oil keymaps
 vim.keymap.set('n', '<leader>-', ':Oil<CR>', { desc = 'Open directory of current buffer' })
 
+-- Terminal popup keymap
+vim.keymap.set('n', '<leader>tt', function()
+  require('custom.utils.term_popup').open()
+end, { desc = 'Open terminal popup at current buffer location' })
+
 -- Telescope file browser keymaps
 vim.keymap.set('n', '<space>fb', ':Telescope file_browser<CR>', { desc = 'Open telescope filebrowser from working directory' })
 -- open file_browser with the path of the current buffer
@@ -188,6 +193,8 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+
+  'github/copilot.vim',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
